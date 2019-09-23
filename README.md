@@ -33,9 +33,9 @@ MVVM, Repository Pattern
 
 # Time Line
 
-| Feature | Devilery Date | Status |
+| Feature | Start Date | Status |
 | ------------- | ------------- | ------------- |
-| Content Cell  | Content Cell  | Content Cell |
-| Content Cell  | Content Cell  | Content Cell |
+| Criação do projeto  | 23/08/2019  | Desenvolvendo |
+| Tela inicial  | Content Cell  | Content Cell |
 
 
