@@ -31,4 +31,11 @@ MVVM, Repository Pattern
 ## License
 (Building)
 
+# Time Line
+```
+| Feature | Devilery Date | Status |
+| ------------- | ------------- | ------------- |
+| Content Cell  | Content Cell  | Content Cell |
+| Content Cell  | Content Cell  | Content Cell |
+
 
