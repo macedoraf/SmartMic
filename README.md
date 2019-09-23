@@ -23,7 +23,7 @@ Example
 MVVM, Repository Pattern
 
 ## Build With
-[Maven](https://kotlinlang.org/docs/kotlin-docs.pdf) - Kotlin
+[Kotlin](https://kotlinlang.org/docs/kotlin-docs.pdf) - Programing Language 
 
 ## Versions
 (Building) 
