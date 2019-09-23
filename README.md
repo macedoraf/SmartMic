@@ -4,14 +4,20 @@
 (Building) 
 
 ### Prerequesites
-```Android API 21
+```
+Android API 21
+```
 
 ## Run the Tests
 (Building) 
-```Example
+```
+Example
+```
 
 ## Code Style
-```Example
+```
+Example
+```
 
 ## Architecture
 MVVM, Repository Pattern
