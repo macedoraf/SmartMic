@@ -32,7 +32,7 @@ MVVM, Repository Pattern
 (Building)
 
 # Time Line
-```
+
 | Feature | Devilery Date | Status |
 | ------------- | ------------- | ------------- |
 | Content Cell  | Content Cell  | Content Cell |
