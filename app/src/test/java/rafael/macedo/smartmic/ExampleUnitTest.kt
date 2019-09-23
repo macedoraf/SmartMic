@@ -1,4 +1,4 @@
-package rafael.macedo.rageplayer
+package rafael.macedo.smartmic
 
 import org.junit.Test
 

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SmartMic</string>
+    <string name="fragment_client_home_lbl_port">Port</string>
+    <string name="fragment_client_home_edt_ip">192.168.0.1</string>
 </resources>

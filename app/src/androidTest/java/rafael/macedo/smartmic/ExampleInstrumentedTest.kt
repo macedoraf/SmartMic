@@ -1,4 +1,4 @@
-package rafael.macedo.rageplayer
+package rafael.macedo.smartmic
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
