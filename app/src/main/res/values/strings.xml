@@ -2,4 +2,7 @@
     <string name="app_name">SmartMic</string>
     <string name="fragment_client_home_lbl_port">Port</string>
     <string name="fragment_client_home_edt_ip">192.168.0.1</string>
+    <string name="fragment_client_home_qrcode_content_description">QRCode</string>
+    <string name="fragment_client_home_connection_info">Connection Info</string>
+    <string name="fragment_client_home_tooltip_help">Tooltip Help</string>
 </resources>
