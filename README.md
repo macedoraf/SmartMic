@@ -35,7 +35,7 @@ MVVM, Repository Pattern
 
 | Feature | Start Date | Status |
 | ------------- | ------------- | ------------- |
-| Criação do projeto  | 23/08/2019  | Desenvolvendo |
+| Criação do projeto  | 23/08/2019  | Feito |
 | Tela inicial  | 09/10/2019 | Desenvolvendo |
 
 
