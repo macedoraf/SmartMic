@@ -29,6 +29,7 @@ dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:$appCompat_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayout_version"
+    implementation "com.google.android.material:material:$material_version"
 
     //Retrofit
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_logging_interceptor_version"

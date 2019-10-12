@@ -9,6 +9,7 @@ buildscript {
         retrofit_version = '2.3.0'
         okhttp_logging_interceptor_version = '3.8.1'
         kotlin_coroutines_version = '1.1.1'
+        material_version = '1.1.0-alpha02'
     }
 
     repositories {

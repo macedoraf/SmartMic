@@ -1,4 +1,4 @@
-package br.com.rafael.smartmic
+package br.com.rafael.smartmic.presentation
 
 import android.app.Application
 
