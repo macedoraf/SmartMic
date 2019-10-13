@@ -1,12 +1,16 @@
 package br.com.rafael.smartmic.presentation.home
 
+import br.com.rafael.smartmic.domain.GetWifiIpAdress
+import br.com.rafael.smartmic.utill.Failure
+import br.com.rafael.smartmic.utill.Interactor
+
 /*
     Project SmartMic
     Created by Rafael in 11/10/2019
 */
 
 class GuestHomePresenter(
-    private val interactor: GuestHome.Interactor,
+    private val getWifiIpAdress: GetWifiIpAdress,
     private var view: GuestHome.View? = null
 ) : GuestHome.Presenter {
 
@@ -16,15 +20,21 @@ class GuestHomePresenter(
     }
 
     override fun onStart() {
-        interactor.whenLoadGuestHomeScreen()
+        getWifiIpAdress.invoke(Interactor.None()) { it.either(::onFailure, ::onWifiConnected) }
     }
 
-    override fun onWifiOn(ip: String) {
-        view?.fetchIpAdress(ip)
+    private fun onFailure(failure: Failure) {
+        when (failure) {
+            is Failure.OnWifiDisconnected ->{
+                view?.showAlertDialog("Alert","Please connect to wifi")
+            }
+        }
+
     }
 
-    override fun onWifiOff() {
-        view?.showAlertDialog("Infomation", "Connect to wifi first")
+    private fun onWifiConnected(ipAdress: String) {
+        view?.fetchIpAdress(ipAdress)
     }
+
 
 }

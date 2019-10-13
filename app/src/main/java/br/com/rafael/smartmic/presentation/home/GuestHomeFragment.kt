@@ -6,8 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import br.com.rafael.smartmic.R
-import br.com.rafael.smartmic.data.DataSystemInfo
-import br.com.rafael.smartmic.di.HomeProviderComponent
+import br.com.rafael.smartmic.utill.HomeProviderComponent
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.guest_home_fragment.*
 
@@ -53,7 +52,7 @@ class GuestHomeFragment : Fragment(), GuestHome.View {
     private fun setUpListeners() {
 
         imgConnect.setOnClickListener {
-        // Try to connect
+        mPresenter
         }
 
         imgMoreInfo.setOnClickListener {
