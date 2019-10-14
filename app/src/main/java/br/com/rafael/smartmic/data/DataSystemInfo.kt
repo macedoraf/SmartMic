@@ -24,6 +24,5 @@ class DataSystemInfo(private val applicationContext: Context) {
         val wifiManager =
             applicationContext.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         return Formatter.formatIpAddress(wifiManager.connectionInfo.ipAddress)
-
     }
 }

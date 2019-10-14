@@ -1,7 +1,5 @@
 package br.com.rafael.smartmic.presentation.home
 
-import br.com.rafael.smartmic.utill.Either
-
 /*
     Project SmartMic
     Created by Rafael in 11/10/2019
@@ -10,8 +8,9 @@ import br.com.rafael.smartmic.utill.Either
 interface GuestHome {
 
     interface View {
-        fun fetchIpAdress(ip: String)
+        fun fetchIpAdress(ip: String, port: String)
         fun showAlertDialog(title: String, message: String)
+        fun showToast(string: String) //To Test
 
     }
 

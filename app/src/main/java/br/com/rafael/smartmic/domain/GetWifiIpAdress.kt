@@ -13,7 +13,8 @@ import br.com.rafael.smartmic.utill.Interactor
 class GetWifiIpAdress(private val systemDataSystemInfo: DataSystemInfo) : Interactor<String, Interactor.None>() {
     override suspend fun run(params: None): Either<Failure, String> {
         return if(systemDataSystemInfo.isWifiConnected()){
-            Either.Right(systemDataSystemInfo.getIp())
+            val ipWithPort = systemDataSystemInfo.getIp() + ":8080"
+            Either.Right(ipWithPort)
         }else{
             Either.Left(Failure.NetworkConnection)
         }

@@ -1,8 +1,10 @@
 package br.com.rafael.smartmic.presentation.home
 
+import br.com.rafael.smartmic.domain.ConnectToHost
 import br.com.rafael.smartmic.domain.GetWifiIpAdress
 import br.com.rafael.smartmic.utill.Failure
 import br.com.rafael.smartmic.utill.Interactor
+import io.reactivex.Observable
 
 /*
     Project SmartMic
@@ -11,8 +13,18 @@ import br.com.rafael.smartmic.utill.Interactor
 
 class GuestHomePresenter(
     private val getWifiIpAdress: GetWifiIpAdress,
+    private val connectToHost: ConnectToHost,
     private var view: GuestHome.View? = null
 ) : GuestHome.Presenter {
+
+    override fun connectToHost(ip: String, port: String) {
+        connectToHost.invoke(ConnectToHost.ConnectToHostParam(ip, port)) {
+            it.either(
+                ::onFailure,
+                ::onHostConnect
+            )
+        }
+    }
 
 
     override fun attachView(view: GuestHome.View) {
@@ -25,15 +37,25 @@ class GuestHomePresenter(
 
     private fun onFailure(failure: Failure) {
         when (failure) {
-            is Failure.OnWifiDisconnected ->{
-                view?.showAlertDialog("Alert","Please connect to wifi")
+            is Failure.OnWifiDisconnected -> {
+                view?.showAlertDialog("Alert", "Please connect to wifi")
             }
         }
 
     }
 
     private fun onWifiConnected(ipAdress: String) {
-        view?.fetchIpAdress(ipAdress)
+        val split = ipAdress.split(":")
+
+        view?.fetchIpAdress(split[0],split[1])
+    }
+
+    private fun onHostConnect(observable: Observable<String>) {
+        observable
+            .subscribe {
+                view?.showToast(it)
+            }
+
     }
 
 
