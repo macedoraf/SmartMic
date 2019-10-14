@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import br.com.rafael.smartmic.R
 import br.com.rafael.smartmic.utill.Injector
+import br.com.rafael.smartmic.utill.showActivityLoading
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.guest_home_fragment.*
 
@@ -15,7 +16,6 @@ import kotlinx.android.synthetic.main.guest_home_fragment.*
 class GuestHomeFragment : Fragment(), GuestHome.View {
 
     lateinit var mPresenter: GuestHome.Presenter
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,11 +71,10 @@ class GuestHomeFragment : Fragment(), GuestHome.View {
     }
 
 
-
     companion object {
-        fun newInstance(component: Injector.HomeProviderComponent): GuestHomeFragment {
+        fun newInstance(presenter: GuestHome.Presenter): GuestHomeFragment {
             val guestHomeFragment = GuestHomeFragment()
-            guestHomeFragment.mPresenter = component.provideGuestHomePresenter()
+            guestHomeFragment.mPresenter = presenter
             guestHomeFragment.mPresenter.attachView(guestHomeFragment)
             return guestHomeFragment
         }

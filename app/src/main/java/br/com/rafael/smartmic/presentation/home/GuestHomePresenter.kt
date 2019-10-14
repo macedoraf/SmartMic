@@ -1,6 +1,5 @@
 package br.com.rafael.smartmic.presentation.home
 
-import br.com.rafael.smartmic.domain.ConnectToHost
 import br.com.rafael.smartmic.domain.GetWifiIpAdress
 import br.com.rafael.smartmic.utill.Failure
 import br.com.rafael.smartmic.utill.Interactor
@@ -13,18 +12,8 @@ import io.reactivex.Observable
 
 class GuestHomePresenter(
     private val getWifiIpAdress: GetWifiIpAdress,
-    private val connectToHost: ConnectToHost,
     private var view: GuestHome.View? = null
 ) : GuestHome.Presenter {
-
-    override fun connectToHost(ip: String, port: String) {
-        connectToHost.invoke(ConnectToHost.ConnectToHostParam(ip, port)) {
-            it.either(
-                ::onFailure,
-                ::onHostConnect
-            )
-        }
-    }
 
 
     override fun attachView(view: GuestHome.View) {
@@ -54,7 +43,7 @@ class GuestHomePresenter(
         observable
             .subscribe {
                 view?.showToast(it)
-            }
+            }.dispose()
 
     }
 
