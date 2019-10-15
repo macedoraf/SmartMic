@@ -1,6 +1,5 @@
 package br.com.rafael.smartmic
 
-import br.com.rafael.smartmic.data.WebsocketRepository
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
