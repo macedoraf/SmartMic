@@ -1,6 +1,8 @@
 package br.com.rafael.smartmic.data
 
+import com.tinder.scarlet.WebSocket
 import com.tinder.scarlet.ws.Receive
+import io.reactivex.Flowable
 import kotlinx.coroutines.Deferred
 
 /*
@@ -11,6 +13,6 @@ import kotlinx.coroutines.Deferred
 interface SmartMicService {
 
     @Receive
-    fun socketEventAsync(): Deferred<String>
+    fun observeWebSocketEvent(): Flowable<WebSocket.Event>
 
 }

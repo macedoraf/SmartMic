@@ -53,7 +53,7 @@ dependencies {
     //Scarlet
     implementation 'com.tinder.scarlet:scarlet:0.1.9'
     implementation group: 'com.tinder.scarlet', name: 'message-adapter-gson', version: '0.1.9'
-    implementation group: 'com.tinder.scarlet', name: 'stream-adapter-coroutines', version: '0.1.9'
+    implementation group: 'com.tinder.scarlet', name: 'stream-adapter-rxjava2', version: '0.1.9'
     implementation group: 'com.tinder.scarlet', name: 'scarlet-core', version: '0.1.9'
     implementation group: 'com.tinder.scarlet', name: 'websocket-okhttp', version: '0.1.9'
     implementation group: 'com.tinder.scarlet', name: 'lifecycle-android', version: '0.1.9'
