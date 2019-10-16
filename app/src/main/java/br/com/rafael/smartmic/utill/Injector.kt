@@ -52,7 +52,7 @@ object Injector {
         }
 
         fun provideWebSokectRepository(): WebSocketRepository {
-            return WebSocketRepository(GsonBuilder().create(), provideOkHttpClient, provideDataSystemInfo())
+            return WebSocketRepository(provideDataSystemInfo())
         }
 
     }

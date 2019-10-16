@@ -10,7 +10,8 @@ import br.com.rafael.smartmic.data.WebSocketRepository
 class ConnectToHost(private val repository: WebSocketRepository) {
 
     fun startConnectionToHost(ip: String, port: String) {
-        repository.startWebsocket("ws://$ip:$port")
+        repository.initServer(ip, port.toInt())
+
     }
 
 

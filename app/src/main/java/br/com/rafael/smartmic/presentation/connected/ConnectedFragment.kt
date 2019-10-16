@@ -33,8 +33,6 @@ class ConnectedFragment : Fragment(), Connected.View {
     override fun onStart() {
         super.onStart()
         presenter.start(ip, port)
-        edtIP.setText("192.168.0.33")
-        edtPort.setText("41810")
 
     }
 
