@@ -26,14 +26,12 @@ class MainActivity : AppCompatActivity() {
     private fun goToHomeScreen() {
         replaceFragment(
             GuestHomeFragment.newInstance(
-                Injector.HomeProviderComponent(
-                    this
-                ).provideGuestHomePresenter()
+                Injector.HomeProviderComponent().provideGuestHomePresenter()
             )
         )
     }
 
-    private fun goToConnectedScreen(ip: String, port: String) {
+    fun goToConnectedScreen(ip: String, port: String) {
         replaceFragment(
             ConnectedFragment.newInstance(
                 ip,

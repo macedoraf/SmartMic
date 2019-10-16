@@ -3,7 +3,6 @@ package br.com.rafael.smartmic.presentation.home
 import br.com.rafael.smartmic.domain.GetWifiIpAdress
 import br.com.rafael.smartmic.utill.Failure
 import br.com.rafael.smartmic.utill.Interactor
-import io.reactivex.Observable
 
 /*
     Project SmartMic
@@ -34,17 +33,7 @@ class GuestHomePresenter(
     }
 
     private fun onWifiConnected(ipAdress: String) {
-        val split = ipAdress.split(":")
-
-        view?.fetchIpAdress(split[0],split[1])
-    }
-
-    private fun onHostConnect(observable: Observable<String>) {
-        observable
-            .subscribe {
-                view?.showToast(it)
-            }.dispose()
-
+        //Do Nothing
     }
 
 

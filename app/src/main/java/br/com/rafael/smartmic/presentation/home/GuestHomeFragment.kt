@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import br.com.rafael.smartmic.R
+import br.com.rafael.smartmic.presentation.MainActivity
 import br.com.rafael.smartmic.utill.Injector
 import br.com.rafael.smartmic.utill.showActivityLoading
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -34,6 +35,8 @@ class GuestHomeFragment : Fragment(), GuestHome.View {
     override fun onStart() {
         super.onStart()
         mPresenter.onStart()
+        edtIP.setText("192.168.0.33")
+        edtPort.setText("10968")
     }
 
     override fun showAlertDialog(title: String, message: String) {
@@ -54,7 +57,10 @@ class GuestHomeFragment : Fragment(), GuestHome.View {
     private fun setUpListeners() {
 
         imgConnect.setOnClickListener {
-
+            (activity as MainActivity).goToConnectedScreen(
+                edtIP.text.toString(),
+                edtPort.text.toString()
+            )
         }
 
         imgMoreInfo.setOnClickListener {

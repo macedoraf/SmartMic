@@ -5,6 +5,8 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.wifi.WifiManager
 import android.text.format.Formatter
+import java.io.IOException
+import java.net.ServerSocket
 
 /*
     Project SmartMic
@@ -24,5 +26,22 @@ class DataSystemInfo(private val applicationContext: Context) {
         val wifiManager =
             applicationContext.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         return Formatter.formatIpAddress(wifiManager.connectionInfo.ipAddress)
+    }
+
+
+    fun getFreeRamdomPort(): Int {
+        try {
+
+            return 34749
+
+        } catch (err: IOException) {
+            throw Exception()
+        }
+
+
+    }
+
+    fun getDeviceId(): String {
+        return "123"
     }
 }

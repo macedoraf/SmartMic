@@ -6,8 +6,8 @@ package br.com.rafael.smartmic.presentation.connected
 interface Connected {
 
     interface Presenter {
-        fun attackView(view: Connected.View)
-        fun start(string: String, string1: String)
+        fun attackView(view: View)
+        fun start(ip: String, port: String)
 
     }
 

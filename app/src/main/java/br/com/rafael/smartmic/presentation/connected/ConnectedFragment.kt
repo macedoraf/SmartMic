@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import br.com.rafael.smartmic.R
 import br.com.rafael.smartmic.utill.hideActivityLoading
 import br.com.rafael.smartmic.utill.showActivityLoading
+import kotlinx.android.synthetic.main.guest_home_fragment.*
 
 /*
     Project SmartMic
@@ -17,30 +18,9 @@ import br.com.rafael.smartmic.utill.showActivityLoading
 class ConnectedFragment : Fragment(), Connected.View {
 
     lateinit var presenter: Connected.Presenter
-
     lateinit var ip: String
-
     lateinit var port: String
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (arguments == null)
-            throw RuntimeException("Arguments cannot be null")
-
-        if (arguments!!.getString(IP_ARG) == null)
-            throw RuntimeException("IP cannot be null")
-        else
-            ip = arguments!!.getString(IP_ARG)!!
-
-        if (arguments!!.getString(PORT_ARG) == null)
-            throw RuntimeException("Port cannot be null")
-        else
-            port = arguments!!.getString(PORT_ARG)!!
-
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,8 +32,9 @@ class ConnectedFragment : Fragment(), Connected.View {
 
     override fun onStart() {
         super.onStart()
-
         presenter.start(ip, port)
+        edtIP.setText("192.168.0.33")
+        edtPort.setText("41810")
 
     }
 
@@ -66,8 +47,6 @@ class ConnectedFragment : Fragment(), Connected.View {
     }
 
     companion object {
-        const val IP_ARG = "ip_start"
-        const val PORT_ARG = "port_start"
 
         fun newInstance(
             ip: String,
@@ -77,19 +56,10 @@ class ConnectedFragment : Fragment(), Connected.View {
             val fragment = ConnectedFragment()
             fragment.presenter = presenter
             presenter.attackView(fragment)
-            setArgs(ip, port, fragment)
+            fragment.ip = ip
+            fragment.port = port
             return fragment
         }
 
-        private fun setArgs(
-            ip: String,
-            port: String,
-            fragment: ConnectedFragment
-        ) {
-            val args = Bundle()
-            args.putString(IP_ARG, ip)
-            args.putString(PORT_ARG, port)
-            fragment.arguments = args
-        }
     }
 }
