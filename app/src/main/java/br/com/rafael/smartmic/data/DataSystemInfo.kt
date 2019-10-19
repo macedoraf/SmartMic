@@ -1,12 +1,16 @@
 package br.com.rafael.smartmic.data
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.wifi.WifiManager
+import android.provider.Settings
 import android.text.format.Formatter
-import java.io.IOException
+import java.lang.Exception
 import java.net.ServerSocket
+import java.util.*
+import java.util.concurrent.ThreadLocalRandom
 
 /*
     Project SmartMic
@@ -28,20 +32,48 @@ class DataSystemInfo(private val applicationContext: Context) {
         return Formatter.formatIpAddress(wifiManager.connectionInfo.ipAddress)
     }
 
-
-    fun getFreeRamdomPort(): Int {
-        try {
-
-            return 34749
-
-        } catch (err: IOException) {
-            throw Exception()
+    private fun getPort(localPort: Int): Int? {
+        return try {
+            val serverSocket = ServerSocket(localPort)
+            serverSocket.localPort
+        } catch (err: Exception) {
+            null
         }
-
 
     }
 
+    @SuppressLint("HardwareIds")
     fun getDeviceId(): String {
-        return "123"
+        return Settings.Secure.getString(
+            applicationContext.contentResolver,
+            Settings.Secure.ANDROID_ID
+        )
+    }
+
+    fun getListOfNumbers(from: Int, to: Int): MutableList<Int> {
+        val list = mutableListOf<Int>()
+        var current = from
+        while (current <= to) {
+            list.add(current)
+            current++
+        }
+
+        return list
+    }
+
+
+    fun getFreeRandomPort(from: Int, to: Int): Int {
+        val rand = Random()
+        val listOfNumbers = getListOfNumbers(from, to)
+        while (listOfNumbers.isNotEmpty()) {
+            val randomElement = listOfNumbers[rand.nextInt(listOfNumbers.size)]
+            val port = getPort(randomElement)
+            if (port == null) {
+                listOfNumbers.remove(randomElement)
+            } else {
+                return port
+            }
+        }
+        return 0
     }
 }

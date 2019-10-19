@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
                 port,
                 Injector
                     .ConnectedProviderComponent()
-                    .provideConnectedPresenter()
+                    .provideConnectedPresenter("$ip:$port")
             )
         )
     }

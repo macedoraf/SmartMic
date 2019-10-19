@@ -16,7 +16,7 @@ class ConnectedPresenter(
     }
 
     override fun start(ip: String, port: String) {
-        connectToHost.startConnectionToHost(ip, port)
         view?.showLoading()
+        connectToHost.initConnection()
     }
 }
