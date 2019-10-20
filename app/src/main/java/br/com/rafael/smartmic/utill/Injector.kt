@@ -2,8 +2,7 @@ package br.com.rafael.smartmic.utill
 
 import android.content.Context
 import br.com.rafael.smartmic.data.DataSystemInfo
-import br.com.rafael.smartmic.data.http.HostAPI
-import br.com.rafael.smartmic.data.httpserver.HttpServer
+import br.com.rafael.smartmic.data.http.HostRepository
 import br.com.rafael.smartmic.domain.ConnectToHost
 import br.com.rafael.smartmic.domain.GetWifiIpAdress
 import br.com.rafael.smartmic.presentation.SmartMicApplication
@@ -13,6 +12,7 @@ import br.com.rafael.smartmic.presentation.home.GuestHome
 import br.com.rafael.smartmic.presentation.home.GuestHomePresenter
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
@@ -36,8 +36,6 @@ object Injector {
 
     private val dataSystemInfo by lazy { DataSystemInfo(context()) }
 
-    private val httpServer by lazy { HttpServer() }
-
     private fun retrofit2(hostAddress: String): Retrofit =
         Retrofit.Builder()
             .baseUrl(hostAddress)
@@ -45,28 +43,35 @@ object Injector {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
 
-    private fun provideHostApi(hostIpAdress: String) =
-        retrofit2(hostIpAdress).create<HostAPI>(HostAPI::class.java)
-
-
     private fun context(): Context = SmartMicApplication.getInstance()
 
 
     class HomeProviderComponent {
         fun provideGuestHomePresenter(): GuestHome.Presenter =
-            GuestHomePresenter(provideGetWifiIpAdress())
+            GuestHomePresenter(provideGetWifiIpAddress())
 
-        private fun provideGetWifiIpAdress(): GetWifiIpAdress =
+        private fun provideGetWifiIpAddress(): GetWifiIpAdress =
             GetWifiIpAdress(dataSystemInfo)
     }
 
     class ConnectedProviderComponent {
-        fun provideConnectedPresenter(ipHostAdress: String): Connected.Presenter {
-            return ConnectedPresenter(provideConnectToHost(ipHostAdress))
+        fun provideConnectedPresenter(ipHostAddress: String): Connected.Presenter {
+            return ConnectedPresenter(provideConnectToHost(ipHostAddress))
         }
 
-        fun provideConnectToHost(ipHostAdress: String): ConnectToHost {
-            return ConnectToHost(dataSystemInfo, httpServer, provideHostApi("http://$ipHostAdress"))
+        private fun provideConnectToHost(ipHostAddress: String): ConnectToHost {
+            return ConnectToHost(dataSystemInfo, provideHostRepository(ipHostAddress))
+        }
+
+        private fun provideHostRepository(ipHostAddress: String): HostRepository {
+            return HostRepository(gson, okHttpClient,provideRequestBuilder(ipHostAddress))
+        }
+
+        private fun provideRequestBuilder(ipHostAddress: String): Request.Builder {
+            return Request.Builder().url("http://$ipHostAddress")
+                .header("accept", "application/json")
+                .method("post",null)
+
         }
 
     }

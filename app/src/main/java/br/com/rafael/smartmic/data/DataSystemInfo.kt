@@ -33,13 +33,15 @@ class DataSystemInfo(private val applicationContext: Context) {
     }
 
     private fun getPort(localPort: Int): Int? {
-        return try {
-            val serverSocket = ServerSocket(localPort)
-            serverSocket.localPort
+        var serverSocket: ServerSocket? = null
+        try {
+            serverSocket = ServerSocket(localPort)
+            return serverSocket.localPort
         } catch (err: Exception) {
-            null
+            return null
+        } finally {
+            serverSocket?.close()
         }
-
     }
 
     @SuppressLint("HardwareIds")
