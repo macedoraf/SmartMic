@@ -36,7 +36,7 @@ class GuestHomeFragment : Fragment(), GuestHome.View {
         super.onStart()
         mPresenter.onStart()
         edtIP.setText("192.168.0.33")
-        edtPort.setText("41810")
+        edtPort.setText("26836")
     }
 
     override fun showAlertDialog(title: String, message: String) {

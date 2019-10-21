@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Smart Mic</string>
+
+
+    <!--    Connected Screen-->
+    <string name="connected_screen_queue_position">Your position in the queue %s</string>
+
+    <!--    Connected Screen-->
 </resources>

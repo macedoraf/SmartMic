@@ -1,7 +1,6 @@
 package br.com.rafael.smartmic.data.http
 
 
-import android.util.Log
 import com.google.gson.Gson
 import io.reactivex.Observable
 import okhttp3.*
@@ -18,34 +17,32 @@ class HostRepository(
     private val requestBuilder: Request.Builder
 ) : Callback {
 
-    private fun createRequestString(typeRequest: TypeRequest): String {
-        return "{\"message\" = ${parser.toJson(typeRequest)}\"}"
+    private fun createRequestString(requestType: RequestType): String {
+        return "{\"message\" = ${parser.toJson(requestType)}\"}"
     }
 
-    private fun createRequestBody(requestType: TypeRequest) =
+    private fun createRequestBody(requestType: RequestType) =
         RequestBody.create(MediaType.parse("text/plain"), createRequestString(requestType))
 
-    fun sendRequestConnectionToHost(ipAddress: String, port: Int, deviceId: String): Observable<*> {
-        val requestType = TypeRequest.Connect(ipAddress, port.toString(), deviceId)
+    fun sendRequestConnectionToHost(ipAddress: String, port: Int, deviceId: String): Observable<ResponseType> {
+        val requestType = RequestType.Connect(ipAddress, port.toString(), deviceId)
         val httpRequest = requestBuilder.put(createRequestBody(requestType)).build()
         okHttpClient.newCall(httpRequest).enqueue(this)
-
-        return Observable.just("")
+        return Observable.just(ResponseType.Ok)
     }
 
     fun sendRequestPinger(): Observable<*> {
-        val requestType = TypeRequest.Ping()
+        val requestType = RequestType.Ping()
         val httpRequest = requestBuilder.put(createRequestBody(requestType)).build()
         okHttpClient.newCall(httpRequest).enqueue(this)
-        return Observable.just("")
+        return Observable.just(ResponseType.Ok)
     }
 
 
     override fun onFailure(call: Call, e: IOException) {
-        //TODO : Send Failure OK to Domain
     }
 
     override fun onResponse(call: Call, response: Response) {
-        //TODO : Send Status Ok to Domain
+
     }
 }

@@ -5,11 +5,13 @@ package br.com.rafael.smartmic.data.httpserver
     Created by Rafael in 19/10/2019
 */
 
-sealed class ServerStatus {
+sealed class ServerStatus(val message: String? = null) {
 
-    object CloseMic : ServerStatus()
+    class Ok(message: String) : ServerStatus(message)
 
-    object OpenMic : ServerStatus()
+    object Started : ServerStatus()
 
-    object Start : ServerStatus()
+    class Error(message: String) : ServerStatus(message)
+
+    class Close : ServerStatus()
 }

@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import br.com.rafael.smartmic.R
+import br.com.rafael.smartmic.presentation.SmartMicApplication
 import br.com.rafael.smartmic.utill.hideActivityLoading
 import br.com.rafael.smartmic.utill.showActivityLoading
+import kotlinx.android.synthetic.main.connected.*
 import kotlinx.android.synthetic.main.guest_home_fragment.*
 
 /*
@@ -43,6 +46,14 @@ class ConnectedFragment : Fragment(), Connected.View {
     override fun showLoading() {
         showActivityLoading()
     }
+
+    override fun setQueuePosition(position: String) {
+        lblQueuePosition.text = String.format(
+            SmartMicApplication.getInstance().resources.getString(R.string.connected_screen_queue_position),
+            position
+        )
+    }
+
 
     companion object {
 

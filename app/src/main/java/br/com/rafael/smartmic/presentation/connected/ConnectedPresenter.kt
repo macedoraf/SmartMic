@@ -10,6 +10,18 @@ class ConnectedPresenter(
     private var view: Connected.View? = null
 ) : Connected.Presenter {
 
+    init {
+        connectToHost.presenter = this
+    }
+
+    override fun hideLoading() {
+        view?.hideLoading()
+    }
+
+    override fun showLoading() {
+        view?.showLoading()
+    }
+
 
     override fun attackView(view: Connected.View) {
         this.view = view
@@ -18,5 +30,9 @@ class ConnectedPresenter(
     override fun start(ip: String, port: String) {
         view?.showLoading()
         connectToHost.initConnection()
+    }
+
+    override fun updateQueuePosition(position: Int) {
+        view?.setQueuePosition(position.toString())
     }
 }
