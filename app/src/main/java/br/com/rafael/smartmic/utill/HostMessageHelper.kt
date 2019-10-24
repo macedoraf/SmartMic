@@ -9,9 +9,8 @@ object HostMessageHelper {
 
     fun parseToJsonString(oldMessage: String): String {
         val beginToRemove = oldMessage.substring(0, 12)
-        val endToRemove = oldMessage.substring(oldMessage.length - 3, oldMessage.length)
-        return oldMessage.replace(beginToRemove, "")
-            .replace(endToRemove, "")
+        val newString = oldMessage.replace(beginToRemove, "").replace("\\", "")
+        return newString.substring(0, newString.length - 2)
 
     }
 }

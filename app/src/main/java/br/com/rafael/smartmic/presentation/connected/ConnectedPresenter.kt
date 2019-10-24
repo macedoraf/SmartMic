@@ -1,5 +1,6 @@
 package br.com.rafael.smartmic.presentation.connected
 
+import br.com.rafael.smartmic.R
 import br.com.rafael.smartmic.domain.ConnectToHost
 
 /**
@@ -10,11 +11,20 @@ class ConnectedPresenter(
     private var view: Connected.View? = null
 ) : Connected.Presenter {
 
+    override fun requestDisconnect() {
+        connectToHost.sendDisconnectRequest()
+    }
+
+    override fun onDestroy() {
+        connectToHost.closeHost()
+    }
+
     override fun pingHost() {
         connectToHost.pingHost()
     }
 
     override fun onConnectSuccess() {
+        view?.hideLoading()
         view?.startPingTimer()
     }
 
@@ -22,12 +32,8 @@ class ConnectedPresenter(
         connectToHost.presenter = this
     }
 
-    override fun hideLoading() {
-        view?.hideLoading()
-    }
-
-    override fun showLoading() {
-        view?.showLoading()
+    override fun onDisconnectedByGuest() {
+        view?.returnToHomeScreen()
     }
 
 
@@ -45,7 +51,21 @@ class ConnectedPresenter(
     }
 
     override fun onHostDisconnect() {
-        view?.showErrorDialog()
+        view?.showErrorDialog(R.string.dialog_message_from_termineted_by_host)
+    }
 
+    override fun onHostNotFound() {
+        view?.showErrorDialog(R.string.dialog_message_host_not_found)
+    }
+
+    override fun sendMessage(message:String) {
+        if(message.isNotBlank()){
+            view?.resetMessageField()
+            connectToHost.sendMessage(message)
+        }
+    }
+
+    override fun onMessageRecived() {
+        view?.showInfoDialog(R.string.dialog_message_recived)
     }
 }

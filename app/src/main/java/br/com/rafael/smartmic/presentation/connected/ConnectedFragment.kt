@@ -1,19 +1,19 @@
 package br.com.rafael.smartmic.presentation.connected
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.IdRes
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import br.com.rafael.smartmic.R
+import br.com.rafael.smartmic.presentation.MainActivity
 import br.com.rafael.smartmic.presentation.SmartMicApplication
 import br.com.rafael.smartmic.utill.RandomSeconds
 import br.com.rafael.smartmic.utill.hideActivityLoading
 import br.com.rafael.smartmic.utill.showActivityLoading
-import kotlinx.android.synthetic.main.connected.*
-import kotlinx.android.synthetic.main.guest_home_fragment.*
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.android.synthetic.main.connected_fragment.*
 import java.util.*
 
 /*
@@ -34,13 +34,33 @@ class ConnectedFragment : Fragment(), Connected.View {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.connected, container, false)
+        return inflater.inflate(R.layout.connected_fragment, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupListeners()
+    }
+
+    private fun setupListeners() {
+        imgDisconnect.setOnClickListener {
+            presenter.requestDisconnect()
+
+        }
+        lblSend.setOnClickListener {
+            presenter.sendMessage(edtSendField.text.toString())
+        }
     }
 
     override fun onStart() {
         super.onStart()
         presenter.start(ip, port)
 
+    }
+
+    override fun onDestroy() {
+        presenter.onDestroy()
+        super.onDestroy()
     }
 
     override fun hideLoading() {
@@ -58,29 +78,50 @@ class ConnectedFragment : Fragment(), Connected.View {
         )
     }
 
+    //TODO : Depois remover daqui
     override fun startPingTimer() {
-        timer.schedule(object :TimerTask(){
-           override fun run() {
-               presenter.pingHost()
-           }
+        timer.schedule(object : TimerTask() {
+            override fun run() {
+                presenter.pingHost()
+            }
 
-       },0,RandomSeconds.getSeconds(20,60))
+        }, 0, RandomSeconds.getSeconds(20, 60))
     }
 
-    override fun cancelPingTimer(){
+    //TODO : Depois remover daqui
+    override fun cancelPingTimer() {
         timer.cancel()
     }
 
-    override fun showInfoDialog() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun showInfoDialog(@StringRes errorMessage: Int) {
+        MaterialAlertDialogBuilder(context)
+            .setTitle(R.string.information_dialog_title)
+            .setMessage(errorMessage)
+            .setCancelable(false)
+            .setNeutralButton(R.string.dialog_button_ok, null)
+            .create()
+            .show()
     }
 
-    override fun showErrorDialog() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+    override fun showErrorDialog(@StringRes errorMessage: Int) {
+        MaterialAlertDialogBuilder(context)
+            .setTitle(R.string.error_dialog_title)
+            .setMessage(errorMessage)
+            .setCancelable(false)
+            .setNeutralButton(R.string.dialog_button_ok) { _, _ ->
+                returnToHomeScreen()
+            }
+            .create()
+            .show()
     }
 
     override fun returnToHomeScreen() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        (activity as MainActivity).goToHomeScreen()
+    }
+
+    override fun resetMessageField() {
+       edtSendField.text?.clear()
     }
 
 

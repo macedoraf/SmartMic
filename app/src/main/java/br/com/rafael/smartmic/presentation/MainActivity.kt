@@ -1,9 +1,12 @@
 package br.com.rafael.smartmic.presentation
 
 import android.os.Bundle
+import android.transition.Transition
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
+import androidx.transition.FragmentTransitionSupport
 import br.com.rafael.smartmic.R
 import br.com.rafael.smartmic.presentation.connected.ConnectedFragment
 import br.com.rafael.smartmic.presentation.home.GuestHomeFragment
@@ -23,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         goToHomeScreen()
     }
 
-    private fun goToHomeScreen() {
+     fun goToHomeScreen() {
         replaceFragment(
             GuestHomeFragment.newInstance(
                 Injector.HomeProviderComponent().provideGuestHomePresenter()
@@ -47,6 +50,7 @@ class MainActivity : AppCompatActivity() {
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(contentFrame.id, fragment)
+            .setTransition(TRANSIT_FRAGMENT_OPEN)
             .commit()
     }
 

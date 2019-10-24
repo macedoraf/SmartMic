@@ -11,6 +11,8 @@ interface GuestHome {
         fun fetchIpAdress(ip: String, port: String)
         fun showAlertDialog(title: String, message: String)
         fun showToast(string: String) //To Test
+        fun showLoading()
+        fun hideLoading()
 
     }
 

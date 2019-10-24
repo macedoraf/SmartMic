@@ -6,7 +6,6 @@ import br.com.rafael.smartmic.data.http.ResponseType
 import br.com.rafael.smartmic.data.httpserver.ServerSocketTask
 import br.com.rafael.smartmic.data.httpserver.ServerStatus
 import br.com.rafael.smartmic.presentation.connected.Connected
-import br.com.rafael.smartmic.utill.HostMessageHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -16,7 +15,7 @@ class ConnectToHost(
     private val systemInfo: DataSystemInfo,
     private val hostRepository: HostRepository,
     private val randomPort: Int = systemInfo.getFreeRandomPort(ragePortStart, ragePortEnd),
-    private val serverSocketTask: ServerSocketTask = ServerSocketTask()
+    private var serverSocketTask: ServerSocketTask? = null
 
 ) {
     lateinit var presenter: Connected.Presenter
@@ -35,23 +34,26 @@ class ConnectToHost(
     }
 
     fun pingHost() {
-        pingSubscription = hostRepository.startSendPing()
+        pingSubscription = hostRepository.sendPing()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .filter { it is ResponseType.Error }
-            .subscribe { presenter.onHostDisconnect() }
+            .subscribe(
+                { presenter.onHostDisconnect() },
+                { presenter.onHostDisconnect() })
     }
 
     fun closeHost() {
-        serverSocketTask.shutdownServer()
+        serverSocketTask?.shutdownServer()
         serverSubscription?.unsubscribe()
         hostSubscription?.dispose()
         pingSubscription?.dispose()
     }
 
     private fun startLocalHttpServer() {
-        serverSocketTask.startServer(randomPort)
-            .subscribe {
+        serverSocketTask = ServerSocketTask()
+        serverSocketTask?.startServer(randomPort)
+            ?.subscribe {
                 when (it) {
                     is ServerStatus.Started -> {
                         requestConnectionToHost(
@@ -60,10 +62,12 @@ class ConnectToHost(
                             systemInfo.getDeviceId()
                         )
                     }
-                    is ServerStatus.Ok -> {
+                    is ServerStatus.QueuePosition -> {
                         it.message?.let { message ->
-                            HostMessageHelper.parseToJsonString(message)
+                            presenter.onConnectSuccess()
+                            presenter.updateQueuePosition(message.toInt())
                         }
+
                     }
                 }
             }
@@ -79,12 +83,42 @@ class ConnectToHost(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter { it is ResponseType.Ok }
-                .subscribe {
-                    presenter.hideLoading()
-                    presenter.onConnectSuccess()
-                }
+                .subscribe(
+                    {
+                        // TODO : START TIMER TIMEOUT EVERY REQUEST MUST HAVE A RESPONSE FROM HOST IN WEBSERVER
+                    },
+                    {
+                        presenter.onHostNotFound()
+                    }
+                )
 
 
     }
 
+    fun sendDisconnectRequest() {
+        hostSubscription = hostRepository.sendRequestDisconnect(
+            systemInfo.getIp(),
+            randomPort,
+            systemInfo.getDeviceId()
+        ).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { presenter.onHostDisconnect() },
+                { }//Tratar Erro
+            )
+    }
+
+    fun sendMessage(message: String) {
+        hostSubscription = hostRepository.sendMessage(
+            message,
+            systemInfo.getIp(),
+            randomPort,
+            systemInfo.getDeviceId()
+        ).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {},
+                {}
+            )
+    }
 }

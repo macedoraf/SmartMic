@@ -28,7 +28,7 @@ sealed class RequestType(
         message: String, ipAddress: String, ipPort: String,
         deviceId: String
     ) :
-        RequestType("command", "MESSAGE_FROM_GUEST", ipAddress, ipPort, deviceId, message)
+        RequestType("message", "MESSAGE_FROM_GUEST", ipAddress, ipPort, deviceId, message)
 
     class MuteMic(ipAddress: String, ipPort: String, deviceId: String) :
         RequestType("command", "MIC_MUTED_BY_GUEST", ipAddress, ipPort, deviceId)

@@ -7,7 +7,9 @@ package br.com.rafael.smartmic.data.httpserver
 
 sealed class ServerStatus(val message: String? = null) {
 
-    class Ok(message: String) : ServerStatus(message)
+    open class Ok(message: String) : ServerStatus(message)
+
+    class QueuePosition(position: String) : Ok(position)
 
     object Started : ServerStatus()
 

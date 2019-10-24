@@ -28,7 +28,6 @@ class GuestHomeFragment : Fragment(), GuestHome.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setUpListeners()
     }
 
@@ -36,7 +35,7 @@ class GuestHomeFragment : Fragment(), GuestHome.View {
         super.onStart()
         mPresenter.onStart()
         edtIP.setText("192.168.0.33")
-        edtPort.setText("26836")
+        edtPort.setText("42914")
     }
 
     override fun showAlertDialog(title: String, message: String) {
@@ -75,6 +74,15 @@ class GuestHomeFragment : Fragment(), GuestHome.View {
     override fun showToast(string: String) {
         Toast.makeText(this.context, string, Toast.LENGTH_LONG).show()
     }
+
+    override fun showLoading() {
+        (activity as MainActivity).showLoading()
+    }
+
+    override fun hideLoading() {
+        (activity as MainActivity).hideLoading()
+    }
+
 
 
     companion object {

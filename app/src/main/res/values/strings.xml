@@ -3,7 +3,13 @@
 
 
     <!--    Connected Screen-->
-    <string name="connected_screen_queue_position">Your position in the queue %s</string>
+    <string name="connected_screen_queue_position">Your position in the queue: %s</string>
+    <string name="information_dialog_title">Information</string>
+    <string name="error_dialog_title">Error</string>
+    <string name="dialog_button_ok">@android:string/ok</string>
+    <string name="dialog_message_from_termineted_by_host">Session terminated by host</string>
+    <string name="dialog_message_host_not_found">Session host not found. Please connect again</string>
+    <string name="dialog_message_recived">Your message was recived</string>
 
     <!--    Connected Screen-->
 </resources>

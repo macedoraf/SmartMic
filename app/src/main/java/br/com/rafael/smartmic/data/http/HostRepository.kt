@@ -3,8 +3,10 @@ package br.com.rafael.smartmic.data.http
 
 import com.google.gson.Gson
 import io.reactivex.Observable
-import okhttp3.*
-import java.io.IOException
+import okhttp3.MediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
 
 /*
     Project SmartMic
@@ -15,7 +17,7 @@ class HostRepository(
     private val parser: Gson,
     private val okHttpClient: OkHttpClient,
     private val requestBuilder: Request.Builder
-) : Callback {
+) {
 
     private fun createRequestString(requestType: RequestType): String {
         return "{\"message\" = ${parser.toJson(requestType)}\"}"
@@ -45,7 +47,26 @@ class HostRepository(
 
     }
 
-    fun startSendPing(): Observable<ResponseType> {
+    fun sendRequestDisconnect(
+        ipAddress: String,
+        port: Int,
+        deviceId: String
+    ): Observable<ResponseType> {
+        val requestType = RequestType.Disconnect(ipAddress, port.toString(), deviceId)
+        val httpRequest = requestBuilder.put(createRequestBody(requestType)).build()
+        return Observable.defer {
+            Observable.just(okHttpClient.newCall(httpRequest).execute())
+                .map<ResponseType> {
+                    if (it.isSuccessful) {
+                        ResponseType.Ok
+                    } else {
+                        ResponseType.Error
+                    }
+                }
+        }
+    }
+
+    fun sendPing(): Observable<ResponseType> {
         val requestType = RequestType.Ping()
         val httpRequest = requestBuilder.put(createRequestBody(requestType)).build()
         return Observable.defer {
@@ -60,11 +81,34 @@ class HostRepository(
         }
     }
 
-
-    override fun onFailure(call: Call, e: IOException) {
+    fun sendMessage(
+        message: String,
+        ipAddress: String,
+        port: Int,
+        deviceId: String
+    ): Observable<ResponseType> = Observable.defer {
+        Observable.just(
+            okHttpClient.newCall(
+                requestBuilder.put(
+                    createRequestBody(
+                        RequestType.Message(
+                            message,
+                            ipAddress,
+                            port.toString(),
+                            deviceId
+                        )
+                    )
+                ).build()
+            ).execute()
+        )
+            .map<ResponseType> {
+                if (it.isSuccessful) {
+                    ResponseType.Ok
+                } else {
+                    ResponseType.Error
+                }
+            }
     }
 
-    override fun onResponse(call: Call, response: Response) {
 
-    }
 }

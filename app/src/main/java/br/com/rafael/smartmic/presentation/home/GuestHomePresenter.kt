@@ -20,10 +20,12 @@ class GuestHomePresenter(
     }
 
     override fun onStart() {
+        view?.showLoading()
         getWifiIpAdress.invoke(Interactor.None()) { it.either(::onFailure, ::onWifiConnected) }
     }
 
     private fun onFailure(failure: Failure) {
+        view?.hideLoading()
         when (failure) {
             is Failure.OnWifiDisconnected -> {
                 view?.showAlertDialog("Alert", "Please connect to wifi")
@@ -33,6 +35,7 @@ class GuestHomePresenter(
     }
 
     private fun onWifiConnected(ipAdress: String) {
+        view?.hideLoading()
         //Do Nothing
     }
 

@@ -1,6 +1,8 @@
 package br.com.rafael.smartmic.data.httpserver
 
 import android.os.AsyncTask
+import br.com.rafael.smartmic.utill.HostMessageHelper
+import org.json.JSONObject
 import rx.subjects.PublishSubject
 import java.io.BufferedOutputStream
 import java.io.BufferedWriter
@@ -40,6 +42,7 @@ class ServerSocketTask :
 
     override fun doInBackground(vararg params: Int?) {
         try {
+            Thread.sleep(1000)
             serverSocket = ServerSocket(params[0]!!)
             observableResponse.onNext(ServerStatus.Started)
             while (isServerOn) {
@@ -74,7 +77,7 @@ class ServerSocketTask :
             }
         } catch (err: Exception) {
             observableResponse.onError(err)
-        }finally {
+        } finally {
             isServerOn = false
             serverSocket?.close()
         }
@@ -82,7 +85,16 @@ class ServerSocketTask :
 
     override fun onProgressUpdate(vararg values: String?) {
         values[1]?.let {
-            observableResponse.onNext(ServerStatus.Ok(it))
+            val parseToJsonString = HostMessageHelper.parseToJsonString(it)
+            val jsonObject = JSONObject(parseToJsonString)
+            when (jsonObject.get("param_1")) {
+                "QUEUE_POSITION" -> {
+                    observableResponse.onNext(ServerStatus.QueuePosition(jsonObject.getString("param_5")))
+                }
+                else -> observableResponse.onNext(ServerStatus.Ok(parseToJsonString))
+
+            }
+
         }
     }
 
