@@ -1,7 +1,5 @@
 package br.com.rafael.smartmic.presentation.connected
 
-import androidx.annotation.IdRes
-
 /**
  * Created by Santander on 14/10/2019
  */
@@ -15,13 +13,21 @@ interface Connected {
 
         fun hideLoading()
         fun showLoading()
+        fun onConnectSuccess()
+        fun onHostDisconnect()
+        fun pingHost()
 
     }
 
     interface View {
         fun showLoading()
         fun hideLoading()
+        fun showInfoDialog()
+        fun showErrorDialog()
+        fun returnToHomeScreen()
         fun setQueuePosition(position: String)
+        fun startPingTimer()
+        fun cancelPingTimer()
     }
 
 }

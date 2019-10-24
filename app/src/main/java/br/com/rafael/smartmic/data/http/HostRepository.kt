@@ -24,18 +24,40 @@ class HostRepository(
     private fun createRequestBody(requestType: RequestType) =
         RequestBody.create(MediaType.parse("text/plain"), createRequestString(requestType))
 
-    fun sendRequestConnectionToHost(ipAddress: String, port: Int, deviceId: String): Observable<ResponseType> {
-        val requestType = RequestType.Connect(ipAddress, port.toString(), deviceId)
-        val httpRequest = requestBuilder.put(createRequestBody(requestType)).build()
-        okHttpClient.newCall(httpRequest).enqueue(this)
-        return Observable.just(ResponseType.Ok)
+    fun sendRequestConnectionToHost(
+        ipAddress: String,
+        port: Int,
+        deviceId: String
+    ): Observable<ResponseType> {
+        return Observable.defer {
+            val requestType = RequestType.Connect(ipAddress, port.toString(), deviceId)
+            val httpRequest = requestBuilder.put(createRequestBody(requestType)).build()
+            Observable.just(okHttpClient.newCall(httpRequest).execute())
+                .map<ResponseType> {
+                    if (it.isSuccessful) {
+                        ResponseType.Ok
+                    } else {
+                        ResponseType.Error
+                    }
+                }
+        }
+
+
     }
 
-    fun sendRequestPinger(): Observable<*> {
+    fun startSendPing(): Observable<ResponseType> {
         val requestType = RequestType.Ping()
         val httpRequest = requestBuilder.put(createRequestBody(requestType)).build()
-        okHttpClient.newCall(httpRequest).enqueue(this)
-        return Observable.just(ResponseType.Ok)
+        return Observable.defer {
+            Observable.just(okHttpClient.newCall(httpRequest).execute())
+                .map<ResponseType> {
+                    if (it.isSuccessful) {
+                        ResponseType.Ok
+                    } else {
+                        ResponseType.Error
+                    }
+                }
+        }
     }
 
 

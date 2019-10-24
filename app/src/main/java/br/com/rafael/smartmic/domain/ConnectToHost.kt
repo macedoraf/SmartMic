@@ -22,6 +22,7 @@ class ConnectToHost(
     lateinit var presenter: Connected.Presenter
     private var serverSubscription: Subscription? = null
     private var hostSubscription: Disposable? = null
+    private var pingSubscription: Disposable? = null
 
     companion object {
         const val ragePortStart = 1000
@@ -33,10 +34,19 @@ class ConnectToHost(
         startLocalHttpServer()
     }
 
+    fun pingHost() {
+        pingSubscription = hostRepository.startSendPing()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .filter { it is ResponseType.Error }
+            .subscribe { presenter.onHostDisconnect() }
+    }
+
     fun closeHost() {
         serverSocketTask.shutdownServer()
         serverSubscription?.unsubscribe()
         hostSubscription?.dispose()
+        pingSubscription?.dispose()
     }
 
     private fun startLocalHttpServer() {
@@ -50,19 +60,13 @@ class ConnectToHost(
                             systemInfo.getDeviceId()
                         )
                     }
-
                     is ServerStatus.Ok -> {
                         it.message?.let { message ->
                             HostMessageHelper.parseToJsonString(message)
                         }
-
                     }
                 }
-
-
             }
-
-
     }
 
     private fun requestConnectionToHost(
@@ -75,7 +79,10 @@ class ConnectToHost(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter { it is ResponseType.Ok }
-                .subscribe { presenter.hideLoading() }
+                .subscribe {
+                    presenter.hideLoading()
+                    presenter.onConnectSuccess()
+                }
 
 
     }

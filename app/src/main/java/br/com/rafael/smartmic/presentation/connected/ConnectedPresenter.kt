@@ -10,6 +10,14 @@ class ConnectedPresenter(
     private var view: Connected.View? = null
 ) : Connected.Presenter {
 
+    override fun pingHost() {
+        connectToHost.pingHost()
+    }
+
+    override fun onConnectSuccess() {
+        view?.startPingTimer()
+    }
+
     init {
         connectToHost.presenter = this
     }
@@ -34,5 +42,10 @@ class ConnectedPresenter(
 
     override fun updateQueuePosition(position: Int) {
         view?.setQueuePosition(position.toString())
+    }
+
+    override fun onHostDisconnect() {
+        view?.showErrorDialog()
+
     }
 }

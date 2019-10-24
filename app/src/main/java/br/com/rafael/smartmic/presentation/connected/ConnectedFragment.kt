@@ -1,6 +1,7 @@
 package br.com.rafael.smartmic.presentation.connected
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +9,12 @@ import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import br.com.rafael.smartmic.R
 import br.com.rafael.smartmic.presentation.SmartMicApplication
+import br.com.rafael.smartmic.utill.RandomSeconds
 import br.com.rafael.smartmic.utill.hideActivityLoading
 import br.com.rafael.smartmic.utill.showActivityLoading
 import kotlinx.android.synthetic.main.connected.*
 import kotlinx.android.synthetic.main.guest_home_fragment.*
+import java.util.*
 
 /*
     Project SmartMic
@@ -23,6 +26,7 @@ class ConnectedFragment : Fragment(), Connected.View {
     lateinit var presenter: Connected.Presenter
     lateinit var ip: String
     lateinit var port: String
+    private val timer by lazy { Timer() }
 
 
     override fun onCreateView(
@@ -52,6 +56,31 @@ class ConnectedFragment : Fragment(), Connected.View {
             SmartMicApplication.getInstance().resources.getString(R.string.connected_screen_queue_position),
             position
         )
+    }
+
+    override fun startPingTimer() {
+        timer.schedule(object :TimerTask(){
+           override fun run() {
+               presenter.pingHost()
+           }
+
+       },0,RandomSeconds.getSeconds(20,60))
+    }
+
+    override fun cancelPingTimer(){
+        timer.cancel()
+    }
+
+    override fun showInfoDialog() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showErrorDialog() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun returnToHomeScreen() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 
