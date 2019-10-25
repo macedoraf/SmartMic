@@ -10,6 +10,8 @@
     <string name="dialog_message_from_termineted_by_host">Session terminated by host</string>
     <string name="dialog_message_host_not_found">Session host not found. Please connect again</string>
     <string name="dialog_message_recived">Your message was recived</string>
+    <string name="send_your_message">Send your message</string>
+    <string name="send">SEND</string>
 
     <!--    Connected Screen-->
 </resources>

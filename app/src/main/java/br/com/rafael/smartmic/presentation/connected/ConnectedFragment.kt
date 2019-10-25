@@ -28,7 +28,6 @@ class ConnectedFragment : Fragment(), Connected.View {
     lateinit var port: String
     private val timer by lazy { Timer() }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -54,7 +53,17 @@ class ConnectedFragment : Fragment(), Connected.View {
 
     override fun onStart() {
         super.onStart()
-        presenter.start(ip, port)
+        (activity as MainActivity).requestMicrophonePermission(object :
+            MainActivity.OnRequestPermissionCallback {
+            override fun onSuccess() {
+                presenter.start(ip, port)
+            }
+
+            override fun onFailure() {
+                returnToHomeScreen()
+            }
+
+        })
 
     }
 
@@ -121,7 +130,7 @@ class ConnectedFragment : Fragment(), Connected.View {
     }
 
     override fun resetMessageField() {
-       edtSendField.text?.clear()
+        edtSendField.text?.clear()
     }
 
 

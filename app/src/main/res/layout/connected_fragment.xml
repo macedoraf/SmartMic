@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
 
@@ -11,24 +11,23 @@
         android:id="@+id/edtSendField"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Send your message"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:hint="@string/send_your_message"
         app:layout_constraintEnd_toEndOf="@+id/lblQueuePosition"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/lblQueuePosition"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.110000014" />
+        app:layout_constraintTop_toBottomOf="@+id/lblQueuePosition" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/lblQueuePosition"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="32dp"
         android:textColor="@android:color/white"
-        android:textSize="28sp"
+        android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/edtSendField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Your position in queue: 1" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -36,64 +35,61 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="SEND"
+        android:text="@string/send"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@android:color/holo_blue_dark"
         android:textSize="32sp"
-        app:layout_constraintEnd_toEndOf="@+id/edtSendField"
-        app:layout_constraintStart_toStartOf="@+id/edtSendField"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtSendField" />
 
     <ImageView
         android:id="@+id/imgDisconnect"
         android:layout_width="wrap_content"
-        android:layout_height="128dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:src="@drawable/icon_disconnect"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat2"
+        app:layout_constraintTop_toBottomOf="@+id/micPanel"
         tools:srcCompat="@drawable/icon_disconnect" />
 
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/linearLayoutCompat2"
+        android:id="@+id/micPanel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3">
+        app:layout_constraintTop_toBottomOf="@+id/imgMicStatus">
 
         <ImageView
-            android:src="@drawable/ic_orange_mic_muted"
-            android:layout_weight="0.5"
-            android:id="@+id/imageView"
+            android:id="@+id/btnMuteUmute"
             android:layout_width="0dp"
             android:layout_height="80dp"
-           />
+            android:layout_weight="0.5"
+            android:src="@drawable/ic_orange_mic_muted" />
 
         <ImageView
-            android:src="@drawable/icon_red_close_mic"
-            android:layout_weight="0.5"
-            android:id="@+id/imageView2"
+            android:id="@+id/btnTurnOffMic"
             android:layout_width="0dp"
             android:layout_height="80dp"
-           />
+            android:layout_weight="0.5"
+            android:src="@drawable/icon_red_close_mic" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/imgMicStatus"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:src="@drawable/icon_light_mic_open"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:src="@drawable/icon_light_mic_open"
-        app:layout_constraintTop_toBottomOf="@+id/lblSend"
-         />
+        app:layout_constraintTop_toBottomOf="@+id/lblSend" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
