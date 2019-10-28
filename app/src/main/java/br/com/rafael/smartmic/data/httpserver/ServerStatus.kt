@@ -13,6 +13,14 @@ sealed class ServerStatus(val message: String? = null) {
 
     object Started : ServerStatus()
 
+    object OpenMic : ServerStatus()
+
+    object CloseMic : ServerStatus()
+
+    object MuteMic : ServerStatus()
+
+    object UnMuteMic : ServerStatus()
+
     class Error(message: String) : ServerStatus(message)
 
     class Close : ServerStatus()

@@ -91,6 +91,23 @@ class ServerSocketTask :
                 "QUEUE_POSITION" -> {
                     observableResponse.onNext(ServerStatus.QueuePosition(jsonObject.getString("param_5")))
                 }
+
+                "OPEN_MIC" -> {
+                    observableResponse.onNext(ServerStatus.OpenMic)
+                }
+
+                "MIC_CLOSED_BY_HOST" -> {
+                    observableResponse.onNext(ServerStatus.CloseMic)
+                }
+
+                "MIC_MUTED_BY_HOST" -> {
+                    observableResponse.onNext(ServerStatus.MuteMic)
+                }
+
+                "MIC_UNMUTED_BY_HOST" -> {
+                    observableResponse.onNext(ServerStatus.UnMuteMic)
+                }
+
                 else -> observableResponse.onNext(ServerStatus.Ok(parseToJsonString))
 
             }

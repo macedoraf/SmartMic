@@ -21,7 +21,9 @@ interface Connected {
         fun onHostDisconnect()
         fun onDisconnectedByGuest()
         fun onMessageRecived()
-
+        fun onOpenMicPanel()
+        fun onMuteMic()
+        fun onUnmuteMic()
 
 
     }

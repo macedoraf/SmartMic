@@ -68,6 +68,19 @@ class ConnectToHost(
                         }
 
                     }
+
+                    is ServerStatus.OpenMic -> {
+                        presenter.onOpenMicPanel()
+                    }
+
+                    is ServerStatus.MuteMic -> {
+                        presenter.onMuteMic()
+                    }
+
+                    is ServerStatus.UnMuteMic -> {
+                        presenter.onUnmuteMic()
+                    }
+
                 }
             }
     }
@@ -119,5 +132,19 @@ class ConnectToHost(
                 {},
                 {}
             )
+    }
+
+    fun sendMuteMic(){
+        //TODO : Send repository mute mic
+
+    }
+
+    fun sendUnmuteMic(){
+        //TODO : Send repository unmute mic
+
+    }
+
+    fun closeMic(){
+        //TODO : Send repository close mic
     }
 }

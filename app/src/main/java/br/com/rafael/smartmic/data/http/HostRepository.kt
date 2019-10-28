@@ -35,7 +35,7 @@ class HostRepository(
             val requestType = RequestType.Connect(ipAddress, port.toString(), deviceId)
             val httpRequest = requestBuilder.put(createRequestBody(requestType)).build()
             Observable.just(okHttpClient.newCall(httpRequest).execute())
-                .map<ResponseType> {
+                .map {
                     if (it.isSuccessful) {
                         ResponseType.Ok
                     } else {
@@ -56,7 +56,7 @@ class HostRepository(
         val httpRequest = requestBuilder.put(createRequestBody(requestType)).build()
         return Observable.defer {
             Observable.just(okHttpClient.newCall(httpRequest).execute())
-                .map<ResponseType> {
+                .map {
                     if (it.isSuccessful) {
                         ResponseType.Ok
                     } else {
@@ -71,7 +71,7 @@ class HostRepository(
         val httpRequest = requestBuilder.put(createRequestBody(requestType)).build()
         return Observable.defer {
             Observable.just(okHttpClient.newCall(httpRequest).execute())
-                .map<ResponseType> {
+                .map {
                     if (it.isSuccessful) {
                         ResponseType.Ok
                     } else {
