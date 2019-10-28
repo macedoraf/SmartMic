@@ -64,7 +64,6 @@ class ConnectToHost(
                     }
                     is ServerStatus.QueuePosition -> {
                         it.message?.let { message ->
-                            presenter.onConnectSuccess()
                             presenter.updateQueuePosition(message.toInt())
                         }
 
@@ -85,7 +84,7 @@ class ConnectToHost(
                 .filter { it is ResponseType.Ok }
                 .subscribe(
                     {
-                        // TODO : START TIMER TIMEOUT EVERY REQUEST MUST HAVE A RESPONSE FROM HOST IN WEBSERVER
+                        presenter.onConnectSuccess()
                     },
                     {
                         presenter.onHostNotFound()

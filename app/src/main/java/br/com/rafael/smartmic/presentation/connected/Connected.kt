@@ -36,6 +36,7 @@ interface Connected {
         fun startPingTimer()
         fun cancelPingTimer()
         fun resetMessageField()
+        fun setUpdatingQueuePosition()
     }
 
 }

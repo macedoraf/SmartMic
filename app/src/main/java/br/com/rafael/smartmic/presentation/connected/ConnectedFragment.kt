@@ -133,6 +133,10 @@ class ConnectedFragment : Fragment(), Connected.View {
         edtSendField.text?.clear()
     }
 
+    override fun setUpdatingQueuePosition() {
+        lblQueuePosition.setText(R.string.connected_screen_updating_queue_position)
+    }
+
 
     companion object {
 
@@ -148,6 +152,5 @@ class ConnectedFragment : Fragment(), Connected.View {
             fragment.port = port
             return fragment
         }
-
     }
 }

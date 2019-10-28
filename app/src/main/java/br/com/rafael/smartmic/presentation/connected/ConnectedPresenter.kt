@@ -25,6 +25,7 @@ class ConnectedPresenter(
 
     override fun onConnectSuccess() {
         view?.hideLoading()
+        view?.setUpdatingQueuePosition()
         view?.startPingTimer()
     }
 

@@ -12,6 +12,7 @@
     <string name="dialog_message_recived">Your message was recived</string>
     <string name="send_your_message">Send your message</string>
     <string name="send">SEND</string>
+    <string name="connected_screen_updating_queue_position">Updating Queue Position</string>
 
     <!--    Connected Screen-->
 </resources>
