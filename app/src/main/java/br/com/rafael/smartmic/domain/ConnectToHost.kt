@@ -6,6 +6,7 @@ import br.com.rafael.smartmic.data.http.ResponseType
 import br.com.rafael.smartmic.data.httpserver.ServerSocketTask
 import br.com.rafael.smartmic.data.httpserver.ServerStatus
 import br.com.rafael.smartmic.presentation.connected.Connected
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -95,16 +96,7 @@ class ConnectToHost(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter { it is ResponseType.Ok }
-                .subscribe(
-                    {
-                        presenter.onConnectSuccess()
-                    },
-                    {
-                        presenter.onHostNotFound()
-                    }
-                )
-
-
+                .subscribe({ presenter.onConnectSuccess() }, { presenter.onHostNotFound() })
     }
 
     fun sendDisconnectRequest() {
@@ -134,17 +126,24 @@ class ConnectToHost(
             )
     }
 
-    fun sendMuteMic(){
+    fun sendMuteMic() {
         //TODO : Send repository mute mic
 
     }
 
-    fun sendUnmuteMic(){
+    fun sendUnmuteMic() {
         //TODO : Send repository unmute mic
 
     }
 
-    fun closeMic(){
+    fun closeMic() {
         //TODO : Send repository close mic
+    }
+
+    private fun subscribeHost(observable: Observable<ResponseType>) {
+        hostSubscription = observable.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {  }
+
     }
 }

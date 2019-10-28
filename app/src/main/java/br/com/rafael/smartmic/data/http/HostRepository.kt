@@ -3,10 +3,7 @@ package br.com.rafael.smartmic.data.http
 
 import com.google.gson.Gson
 import io.reactivex.Observable
-import okhttp3.MediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
+import okhttp3.*
 
 /*
     Project SmartMic
@@ -19,96 +16,45 @@ class HostRepository(
     private val requestBuilder: Request.Builder
 ) {
 
-    private fun createRequestString(requestType: RequestType): String {
-        return "{\"message\" = ${parser.toJson(requestType)}\"}"
-    }
+    private fun createRequestString(requestType: RequestType): String =
+        "{\"message\" = ${parser.toJson(requestType)}\"}"
 
     private fun createRequestBody(requestType: RequestType) =
         RequestBody.create(MediaType.parse("text/plain"), createRequestString(requestType))
 
     fun sendRequestConnectionToHost(
-        ipAddress: String,
-        port: Int,
-        deviceId: String
-    ): Observable<ResponseType> {
-        return Observable.defer {
-            val requestType = RequestType.Connect(ipAddress, port.toString(), deviceId)
-            val httpRequest = requestBuilder.put(createRequestBody(requestType)).build()
-            Observable.just(okHttpClient.newCall(httpRequest).execute())
-                .map {
-                    if (it.isSuccessful) {
-                        ResponseType.Ok
-                    } else {
-                        ResponseType.Error
-                    }
-                }
-        }
+        ipAddress: String, port: Int, deviceId: String
+    ): Observable<ResponseType> =
+        makeRequest(RequestType.Connect(ipAddress, port.toString(), deviceId))
+
+    fun sendRequestDisconnect(ipAddress: String, port: Int, deviceId: String):
+            Observable<ResponseType> =
+        makeRequest(RequestType.Disconnect(ipAddress, port.toString(), deviceId))
+
+    fun sendPing(): Observable<ResponseType> = makeRequest(RequestType.Ping())
+
+    fun sendMessage(message: String, ipAddress: String, port: Int, deviceId: String) =
+        makeRequest(RequestType.Message(message, ipAddress, port.toString(), deviceId))
 
 
+    private fun makeRequest(requestType: RequestType): Observable<ResponseType> {
+        return Observable.fromCallable { executeRequest(requestType) }
+            .map { handleResponse(it) }
     }
 
-    fun sendRequestDisconnect(
-        ipAddress: String,
-        port: Int,
-        deviceId: String
-    ): Observable<ResponseType> {
-        val requestType = RequestType.Disconnect(ipAddress, port.toString(), deviceId)
-        val httpRequest = requestBuilder.put(createRequestBody(requestType)).build()
-        return Observable.defer {
-            Observable.just(okHttpClient.newCall(httpRequest).execute())
-                .map {
-                    if (it.isSuccessful) {
-                        ResponseType.Ok
-                    } else {
-                        ResponseType.Error
-                    }
-                }
+    private fun executeRequest(requestType: RequestType): Response? {
+        return okHttpClient.newCall(
+            requestBuilder.put(
+                createRequestBody(requestType)
+            ).build()
+        ).execute()
+    }
+
+    private fun handleResponse(it: Response): ResponseType {
+        return if (it.isSuccessful) {
+            ResponseType.Ok
+        } else {
+            ResponseType.Error
         }
     }
-
-    fun sendPing(): Observable<ResponseType> {
-        val requestType = RequestType.Ping()
-        val httpRequest = requestBuilder.put(createRequestBody(requestType)).build()
-        return Observable.defer {
-            Observable.just(okHttpClient.newCall(httpRequest).execute())
-                .map {
-                    if (it.isSuccessful) {
-                        ResponseType.Ok
-                    } else {
-                        ResponseType.Error
-                    }
-                }
-        }
-    }
-
-    fun sendMessage(
-        message: String,
-        ipAddress: String,
-        port: Int,
-        deviceId: String
-    ): Observable<ResponseType> = Observable.defer {
-        Observable.just(
-            okHttpClient.newCall(
-                requestBuilder.put(
-                    createRequestBody(
-                        RequestType.Message(
-                            message,
-                            ipAddress,
-                            port.toString(),
-                            deviceId
-                        )
-                    )
-                ).build()
-            ).execute()
-        )
-            .map<ResponseType> {
-                if (it.isSuccessful) {
-                    ResponseType.Ok
-                } else {
-                    ResponseType.Error
-                }
-            }
-    }
-
-
 }

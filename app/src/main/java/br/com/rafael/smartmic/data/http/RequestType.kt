@@ -50,5 +50,5 @@ sealed class RequestType(
 
     class Ping : RequestType("message", "PING")
 
-    
+
 }
