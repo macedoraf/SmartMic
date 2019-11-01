@@ -6,7 +6,6 @@ import br.com.rafael.smartmic.data.http.ResponseType
 import br.com.rafael.smartmic.data.httpserver.ServerSocketTask
 import br.com.rafael.smartmic.data.httpserver.ServerStatus
 import br.com.rafael.smartmic.presentation.connected.Connected
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -19,7 +18,7 @@ class ConnectToHost(
     private var serverSocketTask: ServerSocketTask? = null
 
 ) {
-    lateinit var presenter: Connected.Presenter
+    lateinit var presenter: Connected.Presenter.Output
     private var serverSubscription: Subscription? = null
     private var hostSubscription: Disposable? = null
     private var pingSubscription: Disposable? = null
@@ -67,19 +66,21 @@ class ConnectToHost(
                         it.message?.let { message ->
                             presenter.updateQueuePosition(message.toInt())
                         }
-
                     }
 
                     is ServerStatus.OpenMic -> {
                         presenter.onOpenMicPanel()
+                        presenter.onStartRecording()
                     }
 
                     is ServerStatus.MuteMic -> {
                         presenter.onMuteMic()
+                        presenter.onStopRecording()
                     }
 
                     is ServerStatus.UnMuteMic -> {
                         presenter.onUnmuteMic()
+                        presenter.onResumeRecording()
                     }
 
                 }
@@ -96,7 +97,12 @@ class ConnectToHost(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter { it is ResponseType.Ok }
-                .subscribe({ presenter.onConnectSuccess() }, { presenter.onHostNotFound() })
+                .subscribe(
+                    { presenter.onConnectSuccess() },
+                    { presenter.onHostNotFound() }
+                )
+
+
     }
 
     fun sendDisconnectRequest() {
@@ -108,7 +114,7 @@ class ConnectToHost(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { presenter.onHostDisconnect() },
-                { }//Tratar Erro
+                { presenter.onError(it) }
             )
     }
 
@@ -121,29 +127,52 @@ class ConnectToHost(
         ).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                {},
-                {}
+                { presenter.onMessageRecived() },
+                { presenter.onError(it) }
             )
     }
 
     fun sendMuteMic() {
-        //TODO : Send repository mute mic
+        hostSubscription = hostRepository.sendRequestMuteMic(
+            systemInfo.getIp(),
+            randomPort,
+            systemInfo.getDeviceId()
+        ).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .filter { it is ResponseType.Ok }
+            .subscribe(
+                { presenter.onMuteMic() },
+                { presenter.onError(it) }
+            )
 
     }
 
     fun sendUnmuteMic() {
-        //TODO : Send repository unmute mic
-
-    }
-
-    fun closeMic() {
-        //TODO : Send repository close mic
-    }
-
-    private fun subscribeHost(observable: Observable<ResponseType>) {
-        hostSubscription = observable.subscribeOn(Schedulers.io())
+        hostSubscription = hostRepository.sendRequestUnmuteMic(
+            systemInfo.getIp(),
+            randomPort,
+            systemInfo.getDeviceId()
+        ).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {  }
+            .filter { it is ResponseType.Ok }
+            .subscribe(
+                { presenter.onUnmuteMic() },
+                { presenter.onError(it) }
+            )
 
+    }
+
+    fun sendCloseMic() {
+        hostSubscription = hostRepository.sendRequestCloseMic(
+            systemInfo.getIp(),
+            randomPort,
+            systemInfo.getDeviceId()
+        ).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .filter { it is ResponseType.Ok }
+            .subscribe(
+                { presenter.onCloseMic() },
+                { presenter.onError(it) }
+            )
     }
 }

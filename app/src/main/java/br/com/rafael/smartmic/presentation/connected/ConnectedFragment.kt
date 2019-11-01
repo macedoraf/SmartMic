@@ -23,7 +23,7 @@ import java.util.*
 
 class ConnectedFragment : Fragment(), Connected.View {
 
-    lateinit var presenter: Connected.Presenter
+    lateinit var presenter: Connected.Presenter.Input
     lateinit var ip: String
     lateinit var port: String
     private val timer by lazy { Timer() }
@@ -48,6 +48,14 @@ class ConnectedFragment : Fragment(), Connected.View {
         }
         lblSend.setOnClickListener {
             presenter.sendMessage(edtSendField.text.toString())
+        }
+
+        btnTurnOffMic.setOnClickListener {
+            presenter.requestCloseMic()
+        }
+
+        btnMuteUmute.setOnClickListener {
+            presenter.muteUnmuteMic()
         }
     }
 
@@ -137,13 +145,31 @@ class ConnectedFragment : Fragment(), Connected.View {
         lblQueuePosition.setText(R.string.connected_screen_updating_queue_position)
     }
 
+    override fun showMicPanel() {
+        micPanel.visibility = View.VISIBLE
+        imgMicStatus.visibility = View.VISIBLE
+    }
+
+    override fun changeToMutedMic() {
+        btnMuteUmute.setImageDrawable(this.resources.getDrawable(R.drawable.ic_orange_mic_muted))
+    }
+
+    override fun changeToUnmutedMic() {
+        btnMuteUmute.setImageDrawable(this.resources.getDrawable(R.drawable.ic_orange_umuted_mic))
+    }
+
+    override fun hideMicPanel() {
+        micPanel.visibility = View.GONE
+        imgMicStatus.visibility = View.GONE
+    }
+
 
     companion object {
 
         fun newInstance(
             ip: String,
             port: String,
-            presenter: Connected.Presenter
+            presenter: Connected.Presenter.Input
         ): ConnectedFragment {
             val fragment = ConnectedFragment()
             fragment.presenter = presenter
