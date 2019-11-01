@@ -23,7 +23,7 @@ import java.util.*
 
 class ConnectedFragment : Fragment(), Connected.View {
 
-    lateinit var presenter: Connected.Presenter
+    lateinit var presenter: Connected.Presenter.Input
     lateinit var ip: String
     lateinit var port: String
     private val timer by lazy { Timer() }
@@ -52,6 +52,10 @@ class ConnectedFragment : Fragment(), Connected.View {
 
         btnTurnOffMic.setOnClickListener {
             presenter.requestCloseMic()
+        }
+
+        btnMuteUmute.setOnClickListener {
+            presenter.muteUnmuteMic()
         }
     }
 
@@ -160,13 +164,12 @@ class ConnectedFragment : Fragment(), Connected.View {
     }
 
 
-
     companion object {
 
         fun newInstance(
             ip: String,
             port: String,
-            presenter: Connected.Presenter
+            presenter: Connected.Presenter.Input
         ): ConnectedFragment {
             val fragment = ConnectedFragment()
             fragment.presenter = presenter

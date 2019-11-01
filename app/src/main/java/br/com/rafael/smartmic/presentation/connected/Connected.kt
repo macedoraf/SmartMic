@@ -7,26 +7,38 @@ import androidx.annotation.StringRes
  */
 interface Connected {
 
+
     interface Presenter {
-        fun attackView(view: View)
-        fun start(ip: String, port: String)
-        fun onDestroy()
-        fun requestDisconnect()
-        fun updateQueuePosition(position: Int)
-        fun sendMessage(message: String)
-
-        fun pingHost()
-        fun onHostNotFound()
-        fun onConnectSuccess()
-        fun onHostDisconnect()
-        fun onDisconnectedByGuest()
-        fun onMessageRecived()
-        fun onOpenMicPanel()
-        fun onMuteMic()
-        fun onUnmuteMic()
-        fun requestCloseMic()
 
 
+        interface Input : Presenter {
+            fun attackView(view: View)
+            fun start(ip: String, port: String)
+            fun onDestroy()
+            fun requestDisconnect()
+            fun requestCloseMic()
+            fun sendMessage(message: String)
+            fun pingHost()
+            fun muteUnmuteMic()
+        }
+
+        interface Output : Presenter {
+            fun onError(it: Throwable?)
+            fun onHostNotFound()
+            fun onConnectSuccess()
+            fun onHostDisconnect()
+            fun onDisconnectedByGuest()
+            fun onMessageRecived()
+            fun onOpenMicPanel()
+            fun onMuteMic()
+            fun onUnmuteMic()
+
+            fun onCloseMic()
+            fun updateQueuePosition(position: Int)
+            fun onStartRecording()
+            fun onStopRecording()
+            fun onResumeRecording()
+        }
     }
 
     interface View {

@@ -18,7 +18,7 @@ class ConnectToHost(
     private var serverSocketTask: ServerSocketTask? = null
 
 ) {
-    lateinit var presenter: Connected.Presenter
+    lateinit var presenter: Connected.Presenter.Output
     private var serverSubscription: Subscription? = null
     private var hostSubscription: Disposable? = null
     private var pingSubscription: Disposable? = null
@@ -66,19 +66,21 @@ class ConnectToHost(
                         it.message?.let { message ->
                             presenter.updateQueuePosition(message.toInt())
                         }
-
                     }
 
                     is ServerStatus.OpenMic -> {
                         presenter.onOpenMicPanel()
+                        presenter.onStartRecording()
                     }
 
                     is ServerStatus.MuteMic -> {
                         presenter.onMuteMic()
+                        presenter.onStopRecording()
                     }
 
                     is ServerStatus.UnMuteMic -> {
                         presenter.onUnmuteMic()
+                        presenter.onResumeRecording()
                     }
 
                 }
@@ -116,7 +118,7 @@ class ConnectToHost(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { presenter.onHostDisconnect() },
-                { }//Tratar Erro
+                { presenter.onError(it) }
             )
     }
 
@@ -134,30 +136,47 @@ class ConnectToHost(
             )
     }
 
-    fun sendMuteMic(){
-        //TODO : Send repository mute mic
+    fun sendMuteMic() {
+        hostSubscription = hostRepository.sendRequestMuteMic(
+            systemInfo.getIp(),
+            randomPort,
+            systemInfo.getDeviceId()
+        ).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .filter { it is ResponseType.Ok }
+            .subscribe(
+                { presenter.onMuteMic() },
+                { presenter.onError(it) }
+            )
 
     }
 
-    fun sendUnmuteMic(){
-        //TODO : Send repository unmute mic
+    fun sendUnmuteMic() {
+        hostSubscription = hostRepository.sendRequestUnmuteMic(
+            systemInfo.getIp(),
+            randomPort,
+            systemInfo.getDeviceId()
+        ).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .filter { it is ResponseType.Ok }
+            .subscribe(
+                { presenter.onUnmuteMic() },
+                { presenter.onError(it) }
+            )
 
     }
 
-    fun closeMic(){
-        //TODO : Send repository close mic
-    }
-
-    fun sendCloseMic(){
+    fun sendCloseMic() {
         hostSubscription = hostRepository.sendRequestCloseMic(
             systemInfo.getIp(),
             randomPort,
             systemInfo.getDeviceId()
         ).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .filter { it is ResponseType.Ok }
             .subscribe(
-                {},
-                {}
+                { presenter.onCloseMic() },
+                { presenter.onError(it) }
             )
     }
 }
