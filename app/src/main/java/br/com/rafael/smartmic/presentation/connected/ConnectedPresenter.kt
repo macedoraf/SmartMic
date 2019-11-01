@@ -11,6 +11,7 @@ class ConnectedPresenter(
     private var view: Connected.View? = null
 ) : Connected.Presenter.Input, Connected.Presenter.Output {
 
+
     var isMicMuted = false
 
     override fun requestDisconnect() {
@@ -105,6 +106,18 @@ class ConnectedPresenter(
 
     override fun onCloseMic() {
         view?.hideMicPanel()
+    }
+
+    override fun onStartRecording() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onStopRecording() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onResumeRecording() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 

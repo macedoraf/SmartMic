@@ -55,7 +55,7 @@ object Injector {
     }
 
     class ConnectedProviderComponent {
-        fun provideConnectedPresenter(ipHostAddress: String): Connected.Presenter {
+        fun provideConnectedPresenter(ipHostAddress: String): Connected.Presenter.Input {
             return ConnectedPresenter(provideConnectToHost(ipHostAddress))
         }
 
