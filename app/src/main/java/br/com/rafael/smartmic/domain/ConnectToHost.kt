@@ -98,12 +98,8 @@ class ConnectToHost(
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter { it is ResponseType.Ok }
                 .subscribe(
-                    {
-                        presenter.onConnectSuccess()
-                    },
-                    {
-                        presenter.onHostNotFound()
-                    }
+                    { presenter.onConnectSuccess() },
+                    { presenter.onHostNotFound() }
                 )
 
 
@@ -131,8 +127,8 @@ class ConnectToHost(
         ).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                {},
-                {}
+                { presenter.onMessageRecived() },
+                { presenter.onError(it) }
             )
     }
 
