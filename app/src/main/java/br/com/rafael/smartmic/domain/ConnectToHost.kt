@@ -147,4 +147,17 @@ class ConnectToHost(
     fun closeMic(){
         //TODO : Send repository close mic
     }
+
+    fun sendCloseMic(){
+        hostSubscription = hostRepository.sendRequestCloseMic(
+            systemInfo.getIp(),
+            randomPort,
+            systemInfo.getDeviceId()
+        ).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {},
+                {}
+            )
+    }
 }

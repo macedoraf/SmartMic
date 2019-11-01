@@ -110,5 +110,9 @@ class HostRepository(
             }
     }
 
+    fun sendRequestCloseMic(ip: String, randomPort: Int, deviceId: String): Observable<ResponseType> {
+        return null
+    }
+
 
 }

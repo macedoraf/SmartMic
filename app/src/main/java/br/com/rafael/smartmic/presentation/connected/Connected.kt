@@ -24,6 +24,7 @@ interface Connected {
         fun onOpenMicPanel()
         fun onMuteMic()
         fun onUnmuteMic()
+        fun requestCloseMic()
 
 
     }
@@ -39,6 +40,10 @@ interface Connected {
         fun cancelPingTimer()
         fun resetMessageField()
         fun setUpdatingQueuePosition()
+        fun showMicPanel()
+        fun changeToMutedMic()
+        fun changeToUnmutedMic()
+        fun hideMicPanel()
     }
 
 }

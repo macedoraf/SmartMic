@@ -66,7 +66,25 @@ class ConnectedPresenter(
         }
     }
 
+    override fun requestCloseMic() {
+        connectToHost.sendCloseMic()
+    }
+
     override fun onMessageRecived() {
         view?.showInfoDialog(R.string.dialog_message_recived)
     }
+
+    override fun onOpenMicPanel() {
+        view?.showMicPanel()
+    }
+
+    override fun onMuteMic() {
+        view?.changeToMutedMic()
+    }
+
+    override fun onUnmuteMic() {
+        view?.changeToUnmutedMic()
+    }
+
+
 }
